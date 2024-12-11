@@ -1,3 +1,5 @@
+
+// this is our first command application
 use clap::Parser;
 use colored::*;
 use indicatif::ProgressBar;
