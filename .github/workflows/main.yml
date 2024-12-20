@@ -20,7 +20,7 @@ jobs:
           - x86_64-apple-darwin             # macOS
 
     env:
-      BINARY_NAME: triangle_draw
+      BINARY_NAME: triangle-draw
 
     steps:
       - name: Checkout code
@@ -69,7 +69,7 @@ jobs:
             *.tar.gz
             *.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.CLI_APP }}
 
   pages:
     runs-on: ${{ matrix.os }}
