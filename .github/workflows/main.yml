@@ -20,7 +20,7 @@ jobs:
           - x86_64-apple-darwin             # macOS
 
     env:
-      BINARY_NAME: triangle_draw
+      BINARY_NAME: triangle-draw
 
     steps:
       - name: Checkout code
@@ -69,7 +69,7 @@ jobs:
             *.tar.gz
             *.zip
         env:
-          github_token: ${{ secrets.CLI_APP }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   pages:
     runs-on: ${{ matrix.os }}
@@ -84,7 +84,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Pages Directory
+      - name: Create Docs Directory
         run: |
           mkdir -p docs
           echo "# Triangle Drawing Tool Documentation" > docs/index.md
@@ -99,6 +99,11 @@ jobs:
           echo "\`\`\`bash" >> docs/index.md
           echo "./triangle-draw --height 5 --character '#'" >> docs/index.md
           echo "\`\`\`" >> docs/index.md
+          
+      - name: Create Assets Directory and Style File
+        run: |
+          mkdir -p docs/assets/css
+          echo "body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }" > docs/assets/css/style.scss
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
