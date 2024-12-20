@@ -7,20 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-        target:
-          - x86_64-unknown-linux-musl       # Linux (musl)
-          - x86_64-pc-windows-msvc          # Windows
-          - x86_64-apple-darwin             # macOS
+    runs-on: ubuntu-latest
 
     env:
-      BINARY_NAME: triangle-draw
+      BINARY_NAME: triangle_draw 
 
     steps:
       - name: Checkout code
@@ -30,55 +20,31 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install Cross (Linux Only)
-        if: runner.os == 'Linux'
         run: cargo install cross
 
       - name: Install Target for Cross Compilation
-        run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            rustup target add ${{ matrix.target }}
-          fi
+        run: rustup target add x86_64-unknown-linux-musl
 
       - name: Build Binary
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            cross build --target ${{ matrix.target }} --release --verbose
-          else
-            cargo build --target ${{ matrix.target }} --release --verbose
-          fi
+          cross build --target x86_64-unknown-linux-musl --release --verbose
 
       - name: Create Release Archive
         run: |
           mkdir -p release
-
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            cp target/${{ matrix.target }}/release/$BINARY_NAME.exe release/
-            zip -r ${{ matrix.target }}.zip release
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
-          else
-            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
-          fi
+          cp target/x86_64-unknown-linux-musl/release/$BINARY_NAME release/
+          tar -czvf $BINARY_NAME.tar.gz -C release $BINARY_NAME
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
             *.tar.gz
-            *.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CLI_APP }}
 
   pages:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -97,7 +63,7 @@ jobs:
           echo "2. Run the binary from your terminal." >> docs/index.md
           echo "## Usage" >> docs/index.md
           echo "\`\`\`bash" >> docs/index.md
-          echo "./triangle-draw --height 5 --character '#'" >> docs/index.md
+          echo "./triangle_draw --height 5 --character '#'" >> docs/index.md
           echo "\`\`\`" >> docs/index.md
           
       - name: Create Assets Directory and Style File
