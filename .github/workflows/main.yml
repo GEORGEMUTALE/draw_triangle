@@ -20,7 +20,7 @@ jobs:
           - x86_64-apple-darwin             # macOS
 
     env:
-      BINARY_NAME: triangle-draw
+      BINARY_NAME: triangle_draw
 
     steps:
       - name: Checkout code
