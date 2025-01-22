@@ -1,4 +1,5 @@
-name: Release binary file
+
+name: Release Statically Linked Rust Binary
 
 on:
   push:
@@ -56,37 +57,3 @@ jobs:
             *.zip
         env:
           GITHUB_TOKEN: ${{ secrets.CLI_APP }}
-
-  pages:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Create Docs Directory
-        run: |
-          mkdir -p docs
-          echo "# Triangle Drawing Tool Documentation" > docs/index.md
-          echo "This is a GitHub Pages site for the Triangle Drawing Tool." >> docs/index.md
-          echo "## Features" >> docs/index.md
-          echo "- Draw customizable triangles with any character." >> docs/index.md
-          echo "- Supports command-line arguments for height and character." >> docs/index.md
-          echo "## Installation" >> docs/index.md
-          echo "1. Download the binary for your platform from the [Releases](../../releases) section." >> docs/index.md
-          echo "2. Run the binary from your terminal." >> docs/index.md
-          echo "## Usage" >> docs/index.md
-          echo "\`\`\`bash" >> docs/index.md
-          echo "./triangle_draw --height 5 --character '#'" >> docs/index.md
-          echo "\`\`\`" >> docs/index.md
-          
-      - name: Create Assets Directory and Style File
-        run: |
-          mkdir -p docs/assets/css
-          echo "body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }" > docs/assets/css/style.scss
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.CLI_APP }}
-          publish_dir: docs/
