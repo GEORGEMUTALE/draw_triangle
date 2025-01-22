@@ -34,7 +34,7 @@ fn draw_triangle(height: u32, character: &str, pb: &ProgressBar) {
             character.repeat(chars as usize).green()
         );
 
-        // Update the progress bar
+        // Update the progress bars
         pb.inc(1);
     }
     pb.finish_with_message("Drawing completed!");
