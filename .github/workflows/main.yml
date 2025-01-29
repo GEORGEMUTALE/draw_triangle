@@ -55,7 +55,7 @@ jobs:
           - x86_64-pc-windows-msvc  # Windows (MSVC)
 
     env:
-      BINARY_NAME: draw_triangle.exe
+      BINARY_NAME: draw_triangle
 
     steps:
       - name: Checkout code
