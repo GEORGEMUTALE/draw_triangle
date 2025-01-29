@@ -72,9 +72,9 @@ jobs:
 
       - name: Create Release Archive (Windows)
         run: |
-          mkdir release
-          copy target\${{ matrix.target }}\release\%BINARY_NAME% release\
-          powershell Compress-Archive -Path release\* -DestinationPath ${{ matrix.target }}.zip
+          mkdir -p release
+          cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+          tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
 
       - name: Upload Release Assets (Windows)
         uses: softprops/action-gh-release@v2
